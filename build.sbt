@@ -11,6 +11,10 @@ lazy val server = (project in file("server")).settings(
     "com.vmunier" %% "scalajs-scripts" % "1.0.0",
     specs2 % Test
   ),
+  // Create a map of versioned assets, replacing the empty versioned.js
+  DigestKeys.indexPath := Some("javascripts/versioned.js"),
+  // Assign the asset index to a global versioned var
+  DigestKeys.indexWriter ~= { writer => index => s"var versioned = ${writer(index)};" },
   // Compile the project before generating Eclipse files, so that generated .scala or .class files for views and routes are present
   EclipseKeys.preTasks := Seq(compile in Compile)
 ).enablePlugins(PlayScala).
